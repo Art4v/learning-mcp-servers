@@ -27,3 +27,50 @@ def add_note(message: str) -> str:
         f.write(message + "\n")
     return "Note saved!"
 
+
+@mcp.tool()
+def read_notes() -> str:
+    """
+    Read all notes from the sticky note file.
+
+    Returns:
+        str: The content of all notes, or a message if no notes are found.
+    """
+    
+    ensure_file()
+    with open(NOTES_FILE, "r") as f:
+        notes = f.read().strip()
+    return notes if notes else "No notes found."
+
+
+@mcp.resource("notes://latest")
+def latest_note() -> str:
+    """
+    Retrieve the most recent note from the sticky note file.
+
+    Returns:
+        str: The content of the latest note, or a message if no notes are found.
+    """
+    ensure_file()
+    with open(NOTES_FILE, "r") as f:
+        lines = f.readlines()
+    return lines[-1].strip() if lines else "No notes found."
+
+
+@mcp.prompt()
+def note_summary_prompt() -> str:
+    """
+    Generate a prompt to summarize the notes.
+
+    Returns:
+        str: A prompt asking for a summary of the notes.
+    """
+    ensure_file()
+
+    with open(NOTES_FILE, "r") as f:
+        notes = f.read().strip()
+    
+    if not notes:
+        return "No notes to summarize."
+    
+    return f"Please summarize the following notes: {notes}"
