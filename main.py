@@ -4,7 +4,7 @@ import os
 # Create an MCP server
 mcp = FastMCP("AI Sticky Notes")
 
-NOTES_FILE = "notes.txt"
+NOTES_FILE = os.path.join(os.path.dirname(__file__), "notes.txt")
 
 def ensure_file():
     if not os.path.exists(NOTES_FILE):
